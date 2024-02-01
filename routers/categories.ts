@@ -1,48 +1,78 @@
 import {Router} from "express";
-import mysql from 'mysql';
 import {Categories} from "../types";
+import connectionMySql from "../serverMySQL";
 
 export const categoriesRouter = Router();
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'stocks',
-    port: 3306
-});
-
-connection.connect((error) => {
-    if (error) {
-        console.error(`Error connecting to MySQL:`, error);
-    } else {
-        console.log(`Connecting to MySQL`);
-    }
-})
 
 categoriesRouter.post('/', (req, res, next) => {
 
     try {
-        if (!req.body.name) {
+        if (!req.body.categories) {
             res.status(422).send({error: 'Categories value is not to be an empty'});
         }
 
         const Categories: Categories = {
-            name: req.body.name,
+            categories: req.body.categories,
             description: req.body.description,
         }
 
-        connection.query('INSERT INTO categories SET ?', Categories, (error, results) => {
+        connectionMySql.query('INSERT INTO categories SET ?', Categories, (error, results) => {
             if (error) {
                 console.error('Error inserting category:', error);
                 res.status(500).send({ error: 'Internal Server Error' });
             } else {
-                const insertedCategory = { ...Categories, id: results.insertId };
-                res.status(201).json(insertedCategory);
+                const insertCategory = { ...Categories, id: results.insertId };
+                res.status(201).json(insertCategory);
             }
         });
 
     } catch (e) {
+        return next(e);
+    }
+});
+
+categoriesRouter.get('/', (req, res, next) => {
+
+    try {
+        connectionMySql.query('SELECT categories.id, categories.categories, categories.description FROM categories;',
+            (error, results) => {
+            if (error) {
+                console.error('Error retrieving categories:', error);
+                res.status(500).send({ error: 'Internal Server Error' });
+            } else {
+                res.status(200).json(results);
+            }
+        });
+    } catch (e) {
         next(e);
     }
+
+});
+
+categoriesRouter.get('/:id',  (req, res, next) => {
+
+    try {
+        connectionMySql.query(
+            'SELECT categories.id, categories.categories, categories.description FROM categories WHERE categories.id = ?;',
+            [req.params.id],
+            (error, results) => {
+
+                const categories = results[0];
+
+                if (!categories) {
+                    return  res.status(404).send({error: 'Category not found!'});
+                }
+
+                if (error) {
+                    console.error('Error retrieving category:', error);
+                    res.status(500).send({error: 'Internal server error'})
+                } else {
+                    res.status(200).json(results);
+                }
+
+            });
+    } catch (e) {
+        return next(e);
+    }
+
 });
