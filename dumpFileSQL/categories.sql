@@ -1,0 +1,11 @@
+INSERT INTO stocks.categories (id, categories, description) VALUES (16, 'Мебель', 'Основная часть это мебель офисноого стиля');
+INSERT INTO stocks.categories (id, categories, description) VALUES (17, 'Оргтехника', 'МФУ, Принтера, Сканеры');
+INSERT INTO stocks.categories (id, categories, description) VALUES (18, 'Мониторы', null);
+INSERT INTO stocks.categories (id, categories, description) VALUES (19, 'Устройства ввода', 'Клавиатуры, мышки');
+INSERT INTO stocks.categories (id, categories, description) VALUES (20, 'Системные блоки', null);
+INSERT INTO stocks.categories (id, categories, description) VALUES (21, 'Канцеляские принадлежности', null);
+INSERT INTO stocks.categories (id, categories, description) VALUES (22, 'Устройства длч презентаций', 'Проекторы, полотна');
+INSERT INTO stocks.categories (id, categories, description) VALUES (23, 'Секция кухня', 'Бытовая техника для кухни, также мебель для кухни');
+INSERT INTO stocks.categories (id, categories, description) VALUES (24, 'Кабеля', null);
+INSERT INTO stocks.categories (id, categories, description) VALUES (25, 'Коннекторы', null);
+INSERT INTO stocks.categories (id, categories, description) VALUES (26, 'Боксы', 'Навесные ящики,короба и т.д');
