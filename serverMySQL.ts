@@ -1,5 +1,3 @@
-// import mysql from 'mysql';
-
 import mysql, {Connection} from 'mysql2/promise';
 import configConnect from "./configConnect";
 

@@ -73,36 +73,20 @@ categoriesRouter.get('/:id', async (req, res, next) => {
 
 });
 
-// categoriesRouter.delete('/:id',   async(req, res, next) => {
-//     const paramsID = req.params.id
-//
-//     try {
-//        // const checkId = connectionMySql.query('SELECT * FROM items WHERE items.category_id = ?;',[paramsID]);
-//        //
-//        // if (checkId.length > 0) {
-//        //     return res.status(400).json({error: 'Cannot deleted with associated id!'})
-//        //  }
-//         const [checkIdResult] = await connectionMySql.query(
-//             'SELECT * FROM items WHERE items.category_id = ?;',
-//             [paramsID]
-//         );
-//
-//         if (checkIdResult.length > 0) {
-//             return res.status(400).json({ error: 'Cannot delete with associated id!' });
-//         }
-//         connectionMySql.query(
-//             'DELETE FROM categories WHERE id = ? LIMIT 1;',
-//             [req.params.id],
-//              (error) => {
-//                 if (error) {
-//                     console.error('Error deleting category:', error);
-//                  res.status(500).send({error: 'Internal server error'})
-//                 } else {
-//                  res.status(200).send({success: "Resource was been deleted!"});
-//                 }
-//             });
-//     } catch (e) {
-//         return next(e);
-//     }
-//
-// });
+categoriesRouter.delete('/:id',   async(req, res, next) => {
+    try {
+        const [result, error] = await serverMySQL.getConnection().query(
+            'DELETE FROM categories WHERE id = ? LIMIT 1;',
+            [req.params.id]) as RowDataPacket[];
+
+        if (result) {
+            res.status(200).send({success: "Resource on category table was been deleted!"});
+        } else {
+            console.error('Error deleting category:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+
+    } catch (e) {
+        return next(e);
+    }
+});

@@ -14,6 +14,7 @@ app.use('/items', itemsRouter);
 
 const run = async () => {
     await serverMySQL.init();
+
     app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
     })

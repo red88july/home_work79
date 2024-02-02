@@ -3,6 +3,7 @@ import {Locations} from "../types";
 import connectionMySql from "../serverMySQL";
 import serverMySQL from "../serverMySQL";
 import {RowDataPacket} from "mysql2";
+import {categoriesRouter} from "./categories";
 
 export const locationRouter = Router();
 
@@ -74,4 +75,22 @@ locationRouter.get('/:id', async (req, res, next) => {
         return next(e);
     }
 
+});
+
+locationRouter.delete('/:id',   async(req, res, next) => {
+    try {
+        const [result, error] = await serverMySQL.getConnection().query(
+            'DELETE FROM locations WHERE id = ? LIMIT 1;',
+            [req.params.id]) as RowDataPacket[];
+
+        if (result) {
+            res.status(200).send({success: "Resource on location table was been deleted!"});
+        } else {
+            console.error('Error deleting location:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+
+    } catch (e) {
+        return next(e);
+    }
 });
