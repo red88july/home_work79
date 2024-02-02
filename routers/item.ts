@@ -1,13 +1,12 @@
 import {Router} from "express";
-import connectionMySql from "../serverMySQL";
 import {Items} from "../types";
 import serverMySQL from "../serverMySQL";
 import {RowDataPacket} from "mysql2";
-import {locationRouter} from "./locations";
+import {imagesUpload} from "../multer";
 
 export const itemsRouter = Router();
 
-itemsRouter.post('/', async (req, res, next) => {
+itemsRouter.post('/', imagesUpload.single('image'),async (req, res, next) => {
 
     try {
 
@@ -19,6 +18,7 @@ itemsRouter.post('/', async (req, res, next) => {
             category_id: req.body.category_id,
             location_id: req.body.location_id,
             item: req.body.item,
+            image: req.file ? req.file.filename : null,
             description: req.body.description
         }
 

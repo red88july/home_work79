@@ -12,5 +12,6 @@ export interface Items {
     category_id: number;
     location_id: number;
     item: string;
+    image: string | null;
     description?: string;
 }
